@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="description" content="{% block description %}{% endblock %}">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel=stylesheet href="{{ CSS_URL }}/style.css">
+    </head>
+
+    <body>
+        <!--[if lt IE 9]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <header>
+            <div class="navbar navbar-fixed-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a href="#" class=brand>Brand</a>
+                        <ul class="nav">
+                            {% block header_links %}{% endblock %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        <footer>
+            {% block footer %}{% endblock %}
+        </footer>
+
+        <script>
+            var
+                // Used for non-safe requests
+                CSRF_TOKEN = '{{ csrf_token }}',
+
+                // Can be used for prefixing URLs defined in JavaScript files
+                SCRIPT_NAME = '{{ request.META.SCRIPT_NAME }}',
+
+                // RequireJS configuration
+                require = {
+                    shim: {
+                        underscore: {
+                            exports: '_'
+                        },
+                        backbone: {
+                            deps: ['underscore', 'jquery'],
+                            exports: 'Backbone'
+                        },
+                        bootstrap: ['jquery']
+                    }
+                };
+        </script>
+
+        <!-- Uncomment the below script tag to load RequireJS and load main.js -->
+        <!-- <script data-main=main src="{{ JAVASCRIPT_URL }}/require.js"></script> -->
+
+        {% if not debug %}
+            <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
+                mathiasbynens.be/notes/async-analytics-snippet -->
+            <script>
+                var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+                (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+                g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+                s.parentNode.insertBefore(g,s)}(document,'script'));
+            </script>
+        {% endif %}
+    </body>
+</html>
