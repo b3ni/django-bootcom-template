@@ -20,16 +20,7 @@
         <![endif]-->
 
         <header>
-            <div class="navbar navbar-fixed-top">
-                <div class="navbar-inner">
-                    <div class="container-fluid">
-                        <a href="#" class=brand>Brand</a>
-                        <ul class="nav">
-                            {% block header_links %}{% endblock %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            {% block header %}{% endblock %}
         </header>
 
         <div class="container-fluid">
