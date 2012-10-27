@@ -1,0 +1,8 @@
+django>=1.4
+south
+django_compressor
+
+# Database Drivers, the Python stdlib has support for SQLite
+# psycopg2
+# cx_oracle
+# mysql-python
