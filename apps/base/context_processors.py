@@ -7,6 +7,7 @@ def static(request):
     static_url = settings.STATIC_URL
     prefix = 'src' if settings.DEBUG else 'min'
     return {
+        'BOOTSTRAP_URL': os.path.join(static_url, 'bootstrap'),
         'CSS_URL': os.path.join(static_url, 'stylesheets/css'),
         'IMAGES_URL': os.path.join(static_url, 'images'),
         'JAVASCRIPT_URL': os.path.join(static_url, 'scripts/javascript', prefix),

@@ -1,5 +1,7 @@
 import os
+
 from django.conf.global_settings import *
+from .compressor import *
 
 PROJECT_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../..')
 
@@ -65,6 +67,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -113,6 +116,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'django.contrib.admin',
+
+    'south',
+    'compressor',
+
+    'apps.base',
 )
 
 # A sample logging configuration. The only tangible logging

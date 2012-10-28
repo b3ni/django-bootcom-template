@@ -7,17 +7,11 @@ from global_settings import PROJECT_PATH, INSTALLED_APPS, LOGGING
 # TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(PROJECT_PATH, 'apps.{{ project_name }}.db')
-	}
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(PROJECT_PATH, 'apps.{{ project_name }}.db')
+    }
 }
-
-INSTALLED_APPS += (
-	"compressor",
-
-	'apps.base',
-)
 
 # Non-restricted email port for development, run in a terminal:
 # python -m smtpd -n -c DebuggingServer localhost:1025
