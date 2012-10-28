@@ -14,6 +14,8 @@ DATABASES = {
 }
 
 INSTALLED_APPS += (
+	"compressor",
+
 	'apps.base',
 )
 
