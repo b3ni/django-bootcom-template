@@ -1,10 +1,74 @@
+import os
+import os.path
+
+from fabric.colors import *
 from fabric.api import *
+
+env.warn_only = True
+
+NODE_VERSION = "0.8.14"
+NODE_URL = "https://github.com/joyent/node/archive/v%s.zip" % NODE_VERSION
+
+
+def exists_exe(program):
+    import os
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
+
+
+def exists_file(filename):
+    return os.path.exists(filename)
 
 
 def requirements():
+    # virtualenv activado
+    if 'VIRTUAL_ENV' not in os.environ:
+        exit(red("ERROR: you must activate the virtualenv first!"))
+    VIRTUAL_ENV = os.environ['VIRTUAL_ENV']
+
+    # requerimientos
+    print(green("Requeriments ..."))
+    for c in ["git", "wget", "make"]:
+        if not exists_exe(c):
+            exit(red("ERROR: install " + c))
+
+    # directorio temporal
+    if not exists_file("_tmp"):
+        local("mkdir _tmp")
+
+    # node
+    print(green("Install NODE.js ..."))
+    if not exists_file("_tmp/node.zip"):
+        print(green("Download node..."))
+        local("wget %s -O _tmp/node.zip" % NODE_URL)
+
+    local('cd _tmp && unzip node.zip')
+    local('cd _tmp/node-%s && ./configure --prefix="%s"' % (NODE_VERSION, VIRTUAL_ENV))
+    local('cd _tmp/node-%s && make' % NODE_VERSION)
+    local('cd _tmp/node-%s && make install' % NODE_VERSION)
+
+    # lessc
+    print(green("Install less..."))
+    local('npm install less -g')
+
+    #local("rm _tmp -rf")
+
+
     # less coffies
-    local('sudo npm install -g less coffeelint')
-    local('coffee --version || sudo npm install -g coffee-script')
+    #local('sudo npm install -g less coffeelint')
+    #local('coffee --version || sudo npm install -g coffee-script')
 
 
 def static():
@@ -28,7 +92,7 @@ def syncdb():
     local('./manage.py migrate')
 
 
+@task
 def install():
     execute(requirements)
-    execute(static)
-    execute(syncdb)
+    #execute(static)
