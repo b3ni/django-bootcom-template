@@ -109,7 +109,11 @@ def install():
     if not exists_file('_static/bootstrap'):
         print(green("Install Bootstrap..."))
 
+        local('npm install recess -g')
+        local('npm install uglify-js -g')
+
         local('git clone https://github.com/twitter/bootstrap.git _static/bootstrap')
         local('rm -rf _static/bootstrap/.git')
         local('make -C _static/bootstrap bootstrap')
+
         local('cp _static/bootstrap/bootstrap/js/bootstrap.min.js _static/js')
