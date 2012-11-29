@@ -55,13 +55,15 @@ def syncdb():
 
 @task
 def install():
+    """ Installs all requirements """
+
     # virtualenv activado
     if 'VIRTUAL_ENV' not in os.environ:
         exit(red("ERROR: you must activate the virtualenv first!"))
     VIRTUAL_ENV = os.environ['VIRTUAL_ENV']
 
     # requerimientos
-    print(green("Requeriments ..."))
+    print(green("Check exists files ..."))
     for c in ["git", "wget", "make"]:
         if not exists_exe(c):
             exit(red("ERROR: install " + c))
@@ -71,7 +73,7 @@ def install():
         local("mkdir _tmp")
 
     # node
-    if not exists_exe('npm'):
+    if not exists_file('../bin/npm'):
         print(green("Install NODE.js ..."))
         if not exists_file("_tmp/node.zip"):
             print(green("Download node..."))
@@ -107,13 +109,43 @@ def install():
 
     # bootstrap
     if not exists_file('_static/bootstrap'):
-        print(green("Install Bootstrap..."))
+        execute(reset_bootstrap)
 
-        local('npm install recess -g')
-        local('npm install uglify-js -g')
+    # requeriments
+    execute(requirements)
 
-        local('git clone https://github.com/twitter/bootstrap.git _static/bootstrap')
-        local('rm -rf _static/bootstrap/.git')
-        local('make -C _static/bootstrap bootstrap')
 
-        local('cp _static/bootstrap/bootstrap/js/bootstrap.min.js _static/js')
+@task
+def reset_bootstrap():
+    """ Update bootstrap install """
+    print(green("Install Bootstrap..."))
+
+    if not exists_file("_tmp"):
+        local("mkdir _tmp")
+
+    local('rm -rf _static/bootstrap')
+    local('rm -rf _tmp/*')
+
+    local('git clone https://github.com/twitter/bootstrap.git _tmp/bootstrap')
+    local('rm -rf _tmp/bootstrap/.git')
+
+    local('cp _tmp/bootstrap/js _static/bootstrap/js')
+    local('cp _tmp/bootstrap/less _static/bootstrap/less')
+    local('cp _tmp/bootstrap/img _static/bootstrap/img')
+
+    local('npm install recess connect uglify-js@1 jshint -g')
+    local('cd _tmp/bootstrap && make')
+
+    local('cp _tmp/bootstrap/docs/assets/js/bootstrap.min.js _static/js')
+    local('cp _tmp/bootstrap/docs/assets/css/bootstrap-responsive.css _static/css')
+    local('cp _tmp/bootstrap/docs/assets/css/bootstrap.css _static/css')
+
+    local('rm -rf _tmp')
+
+
+@task
+def requirements():
+    """ Install requirements """
+    print(green("Install requirements..."))
+    local('pip install -r requirements.txt')
+

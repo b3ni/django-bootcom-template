@@ -1,21 +1,20 @@
 import os
 from django.conf.global_settings import *
 
-PROJECT_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../..')
+PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
 from settings_local import *
-
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+from settings_compressor import *
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
-
 MANAGERS = ADMINS
 
 # List of IP addresses which will show debug comments
 INTERNAL_IPS = ('127.0.0.1', '::1')
+
+SYSTEM_EMAIL_PREFIX = "[{{ project_name }}]"
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -42,12 +41,15 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'site/media')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, '_site/media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
+
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = os.path.join(PROJECT_PATH, '_site/static')
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -60,6 +62,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_PATH, '_static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -94,6 +97,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -105,6 +110,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_PATH, '_templates'),
 )
 
 INSTALLED_APPS = (
@@ -119,6 +125,7 @@ INSTALLED_APPS = (
 
     'south',
     'compressor',
+    'debug_toolbar',
 
     'apps.base',
 )
@@ -141,11 +148,15 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'console'],
             'level': 'ERROR',
             'propagate': True,
         },
@@ -156,5 +167,3 @@ IGNORABLE_404_PATHS = (
     r'robots.txt$',
     r'favicon.ico$',
 )
-
-
