@@ -85,7 +85,7 @@ def install():
     execute(download_static_files)
 
     # bootstrap
-    if not exists_file('_static/bootstrap/js/bootstrap.min.js'):
+    if not exists_file('_static/js/bootstrap.min.js'):
         execute(reset_bootstrap)
 
     # requeriments
