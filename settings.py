@@ -1,9 +1,15 @@
 import os
+import sys
 from django.conf.global_settings import *
 
 PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
-from settings_local import *
+try:
+    from settings_local import *
+except:
+    print "settings_local.py not found"
+    sys.exit(1)
+
 from settings_compressor import *
 
 ADMINS = (

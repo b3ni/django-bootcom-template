@@ -89,26 +89,19 @@ def install():
         print(green("Install less..."))
         local('npm install less -g')
 
-        # local('wget -qO _static/js/less.min.js http://lesscss.googlecode.com/files/less-1.3.0.min.js')
-
     # coffe
     if not exists_exe('coffee'):
         print(green("Install coffescript..."))
         local('npm install coffee-script -g')
 
-        # local('wget -qO _static/js/coffee-script.min.js http://coffeescript.org/extras/coffee-script.js')
-
     # borramos temp
     local('rm -rf _tmp')
 
     # downloads
-    if not exists_file('_static/js/jquery.js'):
-        print(green("Download JQuery..."))
-        local('wget -qO _static/js/jquery.js http://code.jquery.com/jquery.js')
-        local('wget -qO _static/js/jquery.min.js http://code.jquery.com/jquery.min.js')
+    execute(download_static_files)
 
     # bootstrap
-    if not exists_file('_static/bootstrap'):
+    if not exists_file('_static/bootstrap/js/bootstrap.min.js'):
         execute(reset_bootstrap)
 
     # requeriments
@@ -124,14 +117,17 @@ def reset_bootstrap():
         local("mkdir _tmp")
 
     local('rm -rf _static/bootstrap')
+    local('mkdir _static/bootstrap')
     local('rm -rf _tmp/*')
 
     local('git clone https://github.com/twitter/bootstrap.git _tmp/bootstrap')
     local('rm -rf _tmp/bootstrap/.git')
 
-    local('cp _tmp/bootstrap/js _static/bootstrap/js')
-    local('cp _tmp/bootstrap/less _static/bootstrap/less')
-    local('cp _tmp/bootstrap/img _static/bootstrap/img')
+    local('cp -r _tmp/bootstrap/js _static/bootstrap/js')
+    local('rm -rf _static/bootstrap/js/tests _static/bootstrap/js/.jshintrc')
+    local('cp -r _tmp/bootstrap/less _static/bootstrap/less')
+    local('rm -rf _static/bootstrap/less/tests')
+    local('cp -r _tmp/bootstrap/img _static/bootstrap/img')
 
     local('npm install recess connect uglify-js@1 jshint -g')
     local('cd _tmp/bootstrap && make')
@@ -140,7 +136,7 @@ def reset_bootstrap():
     local('cp _tmp/bootstrap/docs/assets/css/bootstrap-responsive.css _static/css')
     local('cp _tmp/bootstrap/docs/assets/css/bootstrap.css _static/css')
 
-    local('rm -rf _tmp')
+    #local('rm -rf _tmp')
 
 
 @task
@@ -149,3 +145,17 @@ def requirements():
     print(green("Install requirements..."))
     local('pip install -r requirements.txt')
 
+
+@task
+def download_static_files():
+    """ Download files """
+    if not exists_file('_static/js/jquery.js'):
+        print(green("Download JQuery..."))
+        local('wget -qO _static/js/jquery.js http://code.jquery.com/jquery.js')
+        local('wget -qO _static/js/jquery.min.js http://code.jquery.com/jquery.min.js')
+    if not exists_file('_static/js/less.min.js'):
+        print(green("Download Less..."))
+        local('wget -qO _static/js/less.min.js http://lesscss.googlecode.com/files/less-1.3.0.min.js')
+    if not exists_file('_static/js/coffee-script.min.js'):
+        print(green("Download CoffeeScript..."))
+        local('wget -qO _static/js/coffee-script.min.js http://coffeescript.org/extras/coffee-script.js')
