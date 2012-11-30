@@ -91,7 +91,6 @@ TEMPLATE_LOADERS = (
 # template context.
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
-    'apps.base.context_processors.static',
 )
 
 MIDDLEWARE_CLASSES = (
