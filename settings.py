@@ -4,14 +4,6 @@ from django.conf.global_settings import *
 
 PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
-try:
-    from settings_local import *
-except:
-    print "settings_local.py not found"
-    sys.exit(1)
-
-from settings_compressor import *
-
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -172,3 +164,11 @@ IGNORABLE_404_PATHS = (
     r'robots.txt$',
     r'favicon.ico$',
 )
+
+try:
+    from settings_local import *
+except:
+    print "settings_local.py not found"
+    sys.exit(1)
+
+from settings_compressor import *
