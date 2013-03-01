@@ -9,6 +9,8 @@ env.warn_only = True
 NODE_VERSION = "0.8.21"
 NODE_URL = "https://github.com/joyent/node/archive/v%s.zip" % NODE_VERSION
 
+BOOTSTRAP_VERSION = "v2.3.1"
+
 
 def exists_exe(program):
     import os
@@ -108,6 +110,7 @@ def reset_bootstrap():
     local('rm -rf _tmp/*')
 
     local('git clone https://github.com/twitter/bootstrap.git _tmp/bootstrap')
+    local('cd _tmp/bootstrap && git checkout %s' % BOOTSTRAP_VERSION)
     local('rm -rf _tmp/bootstrap/.git')
 
     local('cp -r _tmp/bootstrap/js _static/bootstrap/js')
