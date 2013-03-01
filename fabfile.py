@@ -90,7 +90,7 @@ def install():
 
     # requeriments
     execute(requirements)
-    
+
     # others
     local("chmod +x manage.py")
 
@@ -116,7 +116,7 @@ def reset_bootstrap():
     local('rm -rf _static/bootstrap/less/tests')
     local('cp -r _tmp/bootstrap/img _static/bootstrap/img')
 
-    local('npm install recess connect uglify-js@1 jshint -g')
+    local('cd _tmp/bootstrap && npm install')
     local('cd _tmp/bootstrap && make')
 
     local('cp _tmp/bootstrap/docs/assets/js/bootstrap.min.js _static/js')
