@@ -6,7 +6,7 @@ from fabric.api import *
 
 env.warn_only = True
 
-NODE_VERSION = "0.8.14"
+NODE_VERSION = "0.8.21"
 NODE_URL = "https://github.com/joyent/node/archive/v%s.zip" % NODE_VERSION
 
 
