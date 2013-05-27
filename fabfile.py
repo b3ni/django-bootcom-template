@@ -6,8 +6,10 @@ from fabric.api import *
 
 env.warn_only = True
 
-NODE_VERSION = "0.8.14"
+NODE_VERSION = "0.8.21"
 NODE_URL = "https://github.com/joyent/node/archive/v%s.zip" % NODE_VERSION
+
+BOOTSTRAP_VERSION = "v2.3.1"
 
 
 def exists_exe(program):
@@ -108,6 +110,7 @@ def reset_bootstrap():
     local('rm -rf _tmp/*')
 
     local('git clone https://github.com/twitter/bootstrap.git _tmp/bootstrap')
+    local('cd _tmp/bootstrap && git checkout %s' % BOOTSTRAP_VERSION)
     local('rm -rf _tmp/bootstrap/.git')
 
     local('cp -r _tmp/bootstrap/js _static/bootstrap/js')
@@ -116,7 +119,7 @@ def reset_bootstrap():
     local('rm -rf _static/bootstrap/less/tests')
     local('cp -r _tmp/bootstrap/img _static/bootstrap/img')
 
-    local('npm install recess connect uglify-js@1 jshint -g')
+    local('cd _tmp/bootstrap && npm install')
     local('cd _tmp/bootstrap && make')
 
 
