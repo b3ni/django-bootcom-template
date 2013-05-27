@@ -90,7 +90,7 @@ def install():
 
     # requeriments
     execute(requirements)
-    
+
     # others
     local("chmod +x manage.py")
 
@@ -119,12 +119,6 @@ def reset_bootstrap():
     local('npm install recess connect uglify-js@1 jshint -g')
     local('cd _tmp/bootstrap && make')
 
-    local('cp _tmp/bootstrap/docs/assets/js/bootstrap.min.js _static/js')
-    local('cp _tmp/bootstrap/docs/assets/css/bootstrap-responsive.css _static/css')
-    local('cp _tmp/bootstrap/docs/assets/css/bootstrap.css _static/css')
-
-    #local('rm -rf _tmp')
-
 
 @task
 def requirements():
@@ -140,9 +134,3 @@ def download_static_files():
         print(green("Download JQuery..."))
         local('wget -qO _static/js/jquery.js http://code.jquery.com/jquery.js')
         local('wget -qO _static/js/jquery.min.js http://code.jquery.com/jquery.min.js')
-    if not exists_file('_static/js/less.min.js'):
-        print(green("Download Less..."))
-        local('wget -qO _static/js/less.min.js http://lesscss.googlecode.com/files/less-1.3.0.min.js')
-    if not exists_file('_static/js/coffee-script.min.js'):
-        print(green("Download CoffeeScript..."))
-        local('wget -qO _static/js/coffee-script.min.js http://coffeescript.org/extras/coffee-script.js')

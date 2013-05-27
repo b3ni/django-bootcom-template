@@ -1,4 +1,4 @@
-Django>=1.4
+Django>=1.5
 Fabric
 South
 django-compressor
